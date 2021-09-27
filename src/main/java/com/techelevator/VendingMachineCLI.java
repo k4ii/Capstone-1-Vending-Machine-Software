@@ -37,6 +37,7 @@ public class VendingMachineCLI {
 
 	public void run() {
 		while (true) {
+			Scanner in = new Scanner(System.in);
 			String choice = (String) menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
 
 			if (choice.equals(MAIN_MENU_OPTION_DISPLAY_ITEMS)) {
@@ -58,6 +59,17 @@ public class VendingMachineCLI {
 
 			} else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
 				// do purchase
+				choice = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS);
+
+				if(choice.equals(PURCHASE_MENU_OPTION_FEED_MONEY)){
+					System.out.println("Insert Amount (Accepting $1, $2, $5, $10 only): ");
+
+					while(true){
+						int dollarIn = in.nextInt();
+						if()
+					}
+				}
+
 
 			}
 		}
