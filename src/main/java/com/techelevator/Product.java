@@ -4,17 +4,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Item {
+public abstract class Product {
     private String name;
     //String slot;
     private int quantity = 5;
     private double price;
     private String itemType;
 
-    public Item(String name, double price) {
+    public Product(String name, double price, int quantity) {
         this.name = name;
         this.price = price;
+        this.quantity = quantity;
     }
+
+
 
     public int getQuantity() {
         return quantity;
