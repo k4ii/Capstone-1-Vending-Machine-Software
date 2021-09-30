@@ -11,10 +11,10 @@ public abstract class Product {
     private double price;
     private String itemType;
 
-    public Product(String name, double price, int quantity) {
+    public Product(String name, double price) {
         this.name = name;
         this.price = price;
-        this.quantity = quantity;
+
     }
 
 

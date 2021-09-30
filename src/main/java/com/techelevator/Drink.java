@@ -1,8 +1,8 @@
 package com.techelevator;
 
 public class Drink extends Product {
-    public Drink(String name, double price,int quantity) {
-        super(name, price, quantity);
+    public Drink(String name, double price) {
+        super(name, price);
     }
 
     @Override

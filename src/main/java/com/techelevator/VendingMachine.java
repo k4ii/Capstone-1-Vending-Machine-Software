@@ -1,123 +1,169 @@
 package com.techelevator;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class VendingMachine {
-    private double balance = 0;
-    File log = new File("/capstone/log.txt");
     int quantity = 5;
-    String path = "/C:\\Users\\Jenic\\Desktop\\Capstone\\capstone\\vendingmachine.csv";
+    double balance=0;
+    NumberFormat nf = NumberFormat.getCurrencyInstance();
+    File log = new File("C:\\Users\\Jenic\\Desktop\\Capstone\\capstone\\log.txt");
+    public int getQuantity(){
+        return quantity;
+    }
+    public void updateInventory(String slot){
+        this.quantity = quantity-1;
+    }
+
+
+    Map<String , Product> items = new LinkedHashMap<>();
+    BufferedReader br= null;
+
+    public Map<String,Product >getInventory(){
+        String path2 ="C:\\Users\\Jenic\\Desktop\\Capstone\\capstone\\vendingmachine.csv" ;
+        File input = new File(path2);
+
+        try{
+            br = new BufferedReader(new FileReader(input));
+            String line =null;
+            while((line=br.readLine())!=null){
+                List<String[]> item = new ArrayList<>();
+                String [] fileLine= line.split("\\|");
+                item.add(fileLine);
+                String slot = fileLine[0].trim();
+                String price = fileLine[2].trim();
+                String name = fileLine[1].trim();
+                String type = fileLine[3].trim();
+                if(type.equals("Chip")){
+                    Product chip = new Chip(name,Double.parseDouble(price));
+                    items.put(slot,chip);
+                }
+                else if(type.equals("Drink")){
+                    Product drink = new Drink (name,Double.parseDouble(price));
+                    items.put(slot,drink);
+                }
+                else if(type.equals("Gum")){
+                    Product gum = new Gum (name,Double.parseDouble(price));
+                    items.put(slot,gum);
+                }
+
+                else if(type.equals("Candy")){
+                    Product candy = new Candy (name,Double.parseDouble(price));
+                    items.put(slot,candy);
+                }
+            }
+
+        }catch (Exception e){
+            System.err.println("file not found");
+        }finally {
+            if(br!=null){
+                try{
+                    br.close();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        return items;
+    }
+
+
+    public String []displayItem(){
+        String[] itemsArray = new String[16];
+        List<String> inventory = new ArrayList<>();
+        File newFile = new File("/Users/fredkonan/Desktop/capstone/vendingmachine.csv");
+        try(Scanner in = new Scanner(newFile)){
+            while(in.hasNextLine()) {
+                String line = in.nextLine();
+                inventory.add(line);
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        for (int i = 1; i < itemsArray.length; i++) {
+            itemsArray[i]=inventory.get(i);
+        }
+        return itemsArray;
+    }
+
+
+    public void feedMoney(double amount){
+        if( amount ==1.0 || amount==2.0 || amount==5.0 || amount==10.0){
+            balance+=amount;
+            System.out.println("Current money provide :"+nf.format(getBalance()));
+        }
+        else {
+            System.out.println("you enter the wrong amount.");
+        }
+        audit("FEED MONEY "+nf.format(amount)+" "+nf.format(getBalance()));
+    }
 
     public double getBalance(){
         return balance;
     }
-    private void setBalance(double balance) {
-        this.balance = balance;
+    public void setBalance(double balance){
+        this.balance= balance;
     }
 
+    public void change(){
+        Double change = getBalance();
 
 
-    
-
-    public void feedMoney(double amount){
-        if (amount == 1.0 || amount == 2.0 || amount == 5.0 || amount == 10.0) {
-            balance += amount;
-            System.out.println("Current Money Provided: $" + amount);
-        } else {
-            System.out.println("You entered wrong amount.");
-        }
-    }
-    public void change() {
-        double change = getBalance();
-        String[] coinName = {"Quarter(s)", "Dime(s)", "Nickel"};
-        Double[] coinValue = {0.25, 0.10, 0.05};
-        for (int i = 0; i < coinName.length ; i++) {
-            int count;
-            count = (int)(change/coinValue[i]);
-            balance -= count * coinValue[i];
-            if (count != 0){
-                System.out.println(count + " "+ coinName[i]);
+        String []coinsName = new String[]{"Quarter(s)","Dime(s)","Nickel(s)"};
+        Double [] coins =  new Double[]{0.25,0.10,0.05};
+        for (int  i= 0; i < coinsName.length ; i++) {
+            int counter;
+            counter= (int)(getBalance()/coins[i]);
+            balance-= counter*coins[i];
+            if(counter!=0){
+                System.out.println(counter + " "+ coinsName[i]);
             }
 
         }
-        audit("CHANGE GIVING", change);
+
+        audit("CHANGE GIVEN: "+change);
+
+
     }
 
-    public File getItemFile() {
-        String path = "/C:\\Users\\Jenic\\Desktop\\Capstone\\capstone\\vendingmachine.csv";
-        File input = new File(path);
-        if (!input.exists() || !input.isFile()) {
-            System.out.println("File not exist");
+    public void audit(String message){
+        LocalDateTime time = LocalDateTime.now();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss ");
+        String line = dtf.format(time)+ " "+ message;
+        try(FileWriter auditFile = new FileWriter(log,true)){
+            auditFile.append(line);
+            auditFile.write("\n");
+        }catch (IOException e){
+            System.err.println("File is not writable ");
+        }
+
+
+    }
+
+    public File getProductFile(){
+        String path2 ="/Users/fredkonan/Desktop/capstone/vendingmachine.csv" ;
+        File input = new File(path2);
+        if(!input.exists()|| !input.isFile()){
+            System.out.println("File does not exist or is not a file");
             System.exit(0);
         }
         return input;
     }
-    public void audit (String name, double amount) {
-        LocalDateTime time = LocalDateTime.now();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss aa");
-        String line = dtf.format(time) + " " + name + " " + amount + " " + getBalance();
-        try(FileWriter auditFile = new FileWriter(log, true)) {
-            auditFile.write(line);
-            auditFile.write("\n");
 
-        } catch (IOException e) {
-            System.err.println("File is not writable");
-        }
+    public void purchaseValidation(String slot){
+        updateInventory(slot);
+        System.out.println(getInventory().get(slot).getName()+" "+nf.format(getInventory().get(slot).getPrice())+" quantity remind: "+getQuantity());
+        audit(getInventory().get(slot).getName()+" "+nf.format(getBalance())+" "+nf.format((getBalance()-getInventory().get(slot).getPrice())));
+        getInventory().get(slot).displayMessage();
+        balance-=getInventory().get(slot).getPrice();
 
-    }
 
-    public void purchased(String slot) {
-        Map<String, Product> inventory = getInventory();
-        if (inventory.get(slot).isAvailable()){
-            inventory.get(slot).purchaseItem();
-            double newBalance = getBalance() - inventory.get(slot).getPrice();
-            balance = newBalance;
-            inventory.get(slot).displayMessage();
-        } else {
-            System.out.println("Sold Out");
-        }
     }
 
 
 
-
- public Map<String, Product> getInventory() {
-
-    Map<String, Product> items = new HashMap<>();
-        try(Scanner reader = new Scanner(path)) {
-            while (reader.hasNextLine()){
-                String line = reader.nextLine();
-                String[] inputLine = line.split("\\|");
-
-                if (inputLine[3].equals("Chip")){
-                    Product chips = new Chips(inputLine[1], Double.parseDouble(inputLine[2]),quantity);
-
-                    items.put(inputLine[0],chips);
-
-                }
-                if (inputLine[3].equals("Drink")) {
-                    Product drink = new Drink(inputLine[1], Double.parseDouble(inputLine[2]),quantity);
-                    items.put(inputLine[0], drink);
-                }
-                if (inputLine[3].equals("Candy")) {
-                    Product candy = new Candy(inputLine[1], Double.parseDouble(inputLine[2]),quantity);
-                    items.put(inputLine[0], candy);
-                }
-                if (inputLine[3].equals("Gum")) {
-                    Product gum = new Candy(inputLine[1], Double.parseDouble(inputLine[2]),quantity);
-                    items.put(inputLine[0], gum);
-                }
-            }
-        }
-     return items;
-    }
 }
