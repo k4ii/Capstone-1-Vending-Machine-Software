@@ -8,28 +8,30 @@ import java.util.*;
 
 public class VendingMachine {
     int quantity = 5;
-    double balance=0;
+    double balance = 0;
     NumberFormat nf = NumberFormat.getCurrencyInstance();
-    File log = new File("C:\\Users\\Jenic\\Desktop\\Capstone\\capstone\\log.txt");
+    File log = new File("log.txt");
+
     public int getQuantity(){
         return quantity;
     }
     public void updateInventory(String slot){
-        this.quantity = quantity-1;
+        //TODO Need to fix
+        //this.quantity = quantity-1;
     }
 
 
-    Map<String , Product> items = new LinkedHashMap<>();
-    BufferedReader br= null;
+    Map<String, Product> items = new LinkedHashMap<>();
+    BufferedReader br = null;
 
-    public Map<String,Product >getInventory(){
-        String path2 ="C:\\Users\\Jenic\\Desktop\\Capstone\\capstone\\vendingmachine.csv" ;
+    public Map<String,Product> getInventory(){
+        String path2 ="vendingmachine.csv" ;
         File input = new File(path2);
 
-        try{
+        try {
             br = new BufferedReader(new FileReader(input));
-            String line =null;
-            while((line=br.readLine())!=null){
+            String line = null;
+            while((line=br.readLine()) != null) {
                 List<String[]> item = new ArrayList<>();
                 String [] fileLine= line.split("\\|");
                 item.add(fileLine);
@@ -37,32 +39,38 @@ public class VendingMachine {
                 String price = fileLine[2].trim();
                 String name = fileLine[1].trim();
                 String type = fileLine[3].trim();
-                if(type.equals("Chip")){
-                    Product chip = new Chip(name,Double.parseDouble(price));
-                    items.put(slot,chip);
+
+                if(type.equals("Chip")) {
+                    Product chip = new Chip(name,Double.parseDouble(price), quantity);
+                    quantity = 5;
+                    items.put(slot, chip);
                 }
-                else if(type.equals("Drink")){
-                    Product drink = new Drink (name,Double.parseDouble(price));
+                else if(type.equals("Drink")) {
+                    Product drink = new Drink (name,Double.parseDouble(price), quantity);
+                    quantity = 5;
                     items.put(slot,drink);
                 }
-                else if(type.equals("Gum")){
-                    Product gum = new Gum (name,Double.parseDouble(price));
+                else if(type.equals("Gum")) {
+                    Product gum = new Gum (name,Double.parseDouble(price), quantity);
+                    quantity = 5;
                     items.put(slot,gum);
                 }
 
-                else if(type.equals("Candy")){
-                    Product candy = new Candy (name,Double.parseDouble(price));
+                else if(type.equals("Candy")) {
+                    Product candy = new Candy (name,Double.parseDouble(price), quantity);
+                    quantity = 5;
                     items.put(slot,candy);
                 }
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             System.err.println("file not found");
-        }finally {
-            if(br!=null){
-                try{
+
+        } finally {
+            if(br != null) {
+                try {
                     br.close();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -71,21 +79,21 @@ public class VendingMachine {
     }
 
 
-    public String []displayItem(){
+    public String []displayItem() {
         String[] itemsArray = new String[16];
         List<String> inventory = new ArrayList<>();
-        File newFile = new File("/Users/fredkonan/Desktop/capstone/vendingmachine.csv");
-        try(Scanner in = new Scanner(newFile)){
-            while(in.hasNextLine()) {
+        File newFile = new File("vendingmachine.csv");
+        try (Scanner in = new Scanner(newFile)) {
+            while (in.hasNextLine()) {
                 String line = in.nextLine();
                 inventory.add(line);
             }
-        }catch (IOException e){
+        } catch (IOException e){
             e.printStackTrace();
         }
 
         for (int i = 1; i < itemsArray.length; i++) {
-            itemsArray[i]=inventory.get(i);
+            itemsArray[i] = inventory.get(i);
         }
         return itemsArray;
     }

@@ -7,14 +7,14 @@ import java.util.Map;
 public abstract class Product {
     private String name;
     //String slot;
-    private int quantity = 5;
+    private int quantity;
     private double price;
     private String itemType;
 
-    public Product(String name, double price) {
+    public Product(String name, double price, int startStock) {
         this.name = name;
         this.price = price;
-
+        this.quantity = startStock;
     }
 
 
@@ -49,6 +49,6 @@ public abstract class Product {
     }
     public abstract void displayMessage();
     public void purchaseItem() {
-        quantity--;
+        this.quantity--;
     }
 }
