@@ -1,54 +1,52 @@
 package com.techelevator;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Product {
-    private String name;
-    //String slot;
-    private int quantity;
+    NumberFormat nf = NumberFormat.getCurrencyInstance();
+    public int items_quantity;
+    private String name ;
     private double price;
-    private String itemType;
 
-    public Product(String name, double price, int startStock) {
+    public Product(String name, double price, int items_quantity) {
         this.name = name;
         this.price = price;
-        this.quantity = startStock;
+        this.items_quantity = items_quantity;
     }
 
-
-
-    public int getQuantity() {
-        return quantity;
+    public Product() {
     }
 
-    public String getItemType() {
-        return itemType;
-    }
-
-    public String getName(){
-
+    public String getName() {
         return name;
-    }
-
-    public double getPrice(){
-
-        return  price;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
     public void setPrice(double price) {
         this.price = price;
     }
-    public boolean isAvailable() {
-        return this.quantity >= 1 ? true : false;
+
+    public abstract void  displayMessage();
+
+    public void purchase(){
+        items_quantity-=1;
+
     }
-    public abstract void displayMessage();
-    public void purchaseItem() {
-        this.quantity--;
+    public void setItems_quantity(){
+        this.items_quantity = items_quantity;
+    }
+
+    public int getItems_quantity() {
+        return items_quantity;
     }
 }

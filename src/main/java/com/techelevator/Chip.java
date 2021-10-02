@@ -13,8 +13,5 @@ public class Chip extends Product {
         System.out.println("Crunch Crunch, Yum!");
     }
 
-    @Override
-    public String getItemType() {
-        return "Chips";
-    }
+
 }

@@ -12,8 +12,5 @@ public class Candy extends Product {
 
     }
 
-    @Override
-    public String getItemType() {
-        return "Candy";
-    }
+
 }

@@ -12,8 +12,5 @@ public class Gum extends Product {
         System.out.println("Chew Chew, Yum!");
     }
 
-    @Override
-    public String getItemType() {
-        return "Gum";
-    }
+
 }

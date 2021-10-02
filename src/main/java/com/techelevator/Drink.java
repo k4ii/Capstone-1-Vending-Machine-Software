@@ -10,8 +10,5 @@ public class Drink extends Product {
         System.out.println("Glug Glug, Yum!");
     }
 
-    @Override
-    public String getItemType() {
-        return "Beverages";
-    }
+
 }
