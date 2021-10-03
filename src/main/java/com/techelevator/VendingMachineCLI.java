@@ -48,17 +48,17 @@ public class VendingMachineCLI {
 		private void mainMenuOptionPurchase() {
 			String select = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTION);
 			if (select.equals(FEED_MONEY_OPTION) || select.equals("1")) {
-				System.out.println("---------------------------");
+				System.out.println("==============================");
 				System.out.println("Enter amount to feed");
 				double amount = input.nextDouble();
 				input.nextLine();
 				vendingMachine.feedMoney(amount);
-				System.out.println("---------------------------");
+				System.out.println("==============================");
 			} else if (select.equals(PURCHASE_OPTION) || select.equals("2")) {
 				purchaseOption();
 			} else if (select.equals("Finish Transaction") || select.equals("3")) {
 				vendingMachine.returnChange();
-				System.out.println("---------------------------");
+				System.out.println("==============================");
 				System.out.println("Thanks for the Purchase!!!!!!");
 			}
 		}
@@ -67,7 +67,7 @@ public class VendingMachineCLI {
 			DisplayMenuItem(vendingMachine);
 			System.out.println("AVAILABLE BALANCE: " + nf.format(vendingMachine.getBalance()));
 			System.out.println("ENTER ITEM ID");
-			System.out.println("---------------------------");
+			System.out.println("==============================");
 			String productId = input.nextLine().toUpperCase(Locale.ROOT);
 			if (vendingMachine.getItems().containsKey(productId)){
 				if(vendingMachine.getItems().get(productId).getItems_quantity() >= 1){
@@ -75,12 +75,15 @@ public class VendingMachineCLI {
 						vendingMachine.purchaseVerification(productId);
 					}else{
 						System.out.println("Oops!!! Not enough money.");
+						System.out.println("==============================");
 					}
 				}else {
 					System.out.println("Sorry, " + vendingMachine.getItems().get(productId).getName()+" is sold out. Please try again." );
+					System.out.println("==============================");
 				}
 			} else {
 				System.out.println("This product does not exist.");
+				System.out.println("==============================");
 			}
 		}
 
@@ -88,7 +91,7 @@ public class VendingMachineCLI {
 
 			for (Map.Entry<String, Product> item : vendingMachine.getItems().entrySet()) {
 				System.out.println(item.getKey() + " "+ item.getValue().getName() + " " +" Price: $" + item.getValue().getPrice()+ "  " +" Quantity:"+item.getValue().getItems_quantity());
-				System.out.println("---------------------------");
+				System.out.println("==============================");
 			}
 
 		}

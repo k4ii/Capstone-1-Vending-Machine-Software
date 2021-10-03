@@ -53,7 +53,7 @@ public class VendingMachine {
 
         } catch (Exception e) {
             System.err.println("Invalid file.");
-
+            System.out.println("==============================");
         } finally {
             if (br != null) {
                 try {
@@ -73,6 +73,7 @@ public class VendingMachine {
             System.out.println("AMOUNT PROVIDED: " + nf.format(getBalance()));
         } else {
             System.out.println("Invalid amount provided.");
+            System.out.println("==============================");
         }
         logger("MONEY FED " + nf.format(amount) + " " + nf.format(getBalance()));
     }
