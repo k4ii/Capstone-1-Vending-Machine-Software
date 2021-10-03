@@ -1,12 +1,6 @@
 package com.techelevator;
 
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 public abstract class Product {
-    NumberFormat nf = NumberFormat.getCurrencyInstance();
     public int items_quantity;
     private String name ;
     private double price;
