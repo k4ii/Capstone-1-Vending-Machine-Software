@@ -31,8 +31,8 @@ public class VendingMachine {
                 String[] fileLine = line.split("\\|");
                 item.add(fileLine);
                 String slot = fileLine[0];
-                String price = fileLine[2];
                 String name = fileLine[1];
+                String price = fileLine[2];
                 String type = fileLine[3];
 
                 if (type.equals("Chip")) {
